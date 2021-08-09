@@ -1,20 +1,19 @@
 
-//https://medium.com/@tchaguitos/populando-selects-de-estados-e-cidades-utilizando-geoapibrasil-b2bcb771de33
-
-window.onload = function (){
+window.onload = function () {
+    const selectPaises = document.querySelector('#nome')
     let url_paises = "https://servicodados.ibge.gov.br/api/v1/paises"
-
-
-    const names = document.querySelector("#nome")
-
-    fetch(url_paises)
-        .then(res => res.json())
-        .then (paises =>{
-            paises.map(paises => {
-                const option = document.createElement('option')
-                option.textContent = Object.values(paises.nome)
-                console.log(option)
-                names.appendChild(option)
+    function setPaises() {
+        fetch(url_paises)
+            .then(resposta => resposta.json())
+            .then(paises => {
+                paises.map(pais => {
+                    const add = document.createElement('option')
+                    add.setAttribute('value',Object.values(pais.id["ISO-3166-1-ALPHA-3"]))
+                    add.textContent = `${Object.values(pais.id["ISO-3166-1-ALPHA-3"])}:${Object.values(pais.nome)}`
+                    selectPaises.appendChild(add)
+                    console.log(add)
+                })
             })
-        })
+    }
+    setPaises()
 }
