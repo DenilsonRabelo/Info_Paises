@@ -1,5 +1,5 @@
 
-
+//https://medium.com/@tchaguitos/populando-selects-de-estados-e-cidades-utilizando-geoapibrasil-b2bcb771de33
 
 window.onload = function (){
     let url_paises = "https://servicodados.ibge.gov.br/api/v1/paises"
