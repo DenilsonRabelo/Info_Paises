@@ -21,8 +21,8 @@ window.onload = function () {
     setPaises()
 
 
-    function letras(value){
-        if (value != ','){
+    function letras(value) {
+        if (value != ',') {
             return value
         }
     }
@@ -36,18 +36,26 @@ window.onload = function () {
         for (const i in valor) {
             sigla = valor[0] + valor[2]
         }
+
+        function tiraVirgula(dados) {
+            for (var i = 0; i < dados.length; i++) {
+                if (dados[i] == ',' || dados[i] == "\"" || dados[i] == "\]" || dados[i] == "\[") {
+                    dados = dados.replace(',', '').replace("\"\"", "").replace("\"", "").replace("\]", "").replace("\[", "")
+                }
+            }
+            return dados
+        }
+
         fetch(`https://servicodados.ibge.gov.br/api/v1/paises/${sigla}`)
             .then(res => res.json())
             .then(data => {
                 data.map(nome => {
                     const area = areaTotal
-                    area.textContent = Object.values(nome.area["total"]).filter(n => Number(n) || n == false).join(``)+"  km²"
+                    area.textContent = Object.values(nome.area["total"]).filter(n => Number(n) || n == false).join(``) + "  km²"
 
 
                     const local = localizacao
-                    local.textContent =Object.values(nome.localizacao["regiao"]["nome"])
-                    local.textContent = local.textContent.replace(',','').replace(',','').replace(',','').replace(',','').replace(',','').replace(',','')
-
+                    local.textContent = tiraVirgula(JSON.stringify(Object.values(nome.localizacao["regiao"]["nome"])))
                 })
             })
 
