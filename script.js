@@ -1,5 +1,5 @@
 window.onload = function () {
-
+    const sle = document.querySelector('#nome')
     const selectPaises = document.querySelector('#nome')
     let url_paises = "https://servicodados.ibge.gov.br/api/v1/paises"
 
@@ -8,8 +8,8 @@ window.onload = function () {
         .then(paises => {
             paises.map(pais => {
                 const add = document.createElement('option')
-                add.setAttribute('value', Object.values(pais.id["ISO-3166-1-ALPHA-2"]))
-                add.textContent = Object.values(pais.nome)
+                add.setAttribute('value', pais.id["ISO-3166-1-ALPHA-2"])
+                add.textContent = pais.nome.abreviado
                 selectPaises.appendChild(add)
             })
         })
@@ -18,15 +18,11 @@ window.onload = function () {
 
 
 
-
-    const sle = document.querySelector('#nome')
     sle.addEventListener('click', () => {
-        let sigla
         const select = document.querySelector('#nome')
-        var valor = select.options[select.selectedIndex].value
-        for (const i in valor) {
-            sigla = valor[0] + valor[2]
-        }
+
+
+        //retorna o JSON sem os caracteres especiais
         function refatoraJson(obj) {
             let b = JSON.stringify(obj)
             b = b.replace(/-/gi, "")
@@ -35,7 +31,7 @@ window.onload = function () {
         }
 
 
-        fetch(`https://servicodados.ibge.gov.br/api/v1/paises/${sigla}`)
+        fetch(`https://servicodados.ibge.gov.br/api/v1/paises/${select.options[select.selectedIndex].value}`)
             .then(res => res.json())
             .then(data => {
                 data.map(p => {
