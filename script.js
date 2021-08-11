@@ -1,34 +1,28 @@
-
 window.onload = function () {
-    const areaTotal = document.getElementById('area')
+    var areaTotal = document.getElementById('area')
     const localizacao = document.getElementById('localizacao')
+    const lingua = document.getElementById('linguas')
 
-    const sle = document.querySelector('#nome')
     const selectPaises = document.querySelector('#nome')
     let url_paises = "https://servicodados.ibge.gov.br/api/v1/paises"
-    function setPaises() {
-        fetch(url_paises)
-            .then(resposta => resposta.json())
-            .then(paises => {
-                paises.map(pais => {
-                    const add = document.createElement('option')
-                    add.setAttribute('value', Object.values(pais.id["ISO-3166-1-ALPHA-2"]))
-                    add.textContent = Object.values(pais.nome)
-                    selectPaises.appendChild(add)
-                })
+
+    fetch(url_paises)
+        .then(resposta => resposta.json())
+        .then(paises => {
+            paises.map(pais => {
+                const add = document.createElement('option')
+                add.setAttribute('value', Object.values(pais.id["ISO-3166-1-ALPHA-2"]))
+                add.textContent = Object.values(pais.nome)
+                selectPaises.appendChild(add)
             })
-    }
-    setPaises()
+        })
 
 
-    function letras(value) {
-        if (value != ',') {
-            return value
-        }
-    }
 
 
-    //pega o valor do value no <option>
+
+
+    const sle = document.querySelector('#nome')
     sle.addEventListener('click', () => {
         let sigla
         const select = document.querySelector('#nome')
@@ -36,29 +30,32 @@ window.onload = function () {
         for (const i in valor) {
             sigla = valor[0] + valor[2]
         }
-
-        function tiraVirgula(dados) {
-            for (var i = 0; i < dados.length; i++) {
-                if (dados[i] == ',' || dados[i] == "\"" || dados[i] == "\]" || dados[i] == "\[") {
-                    dados = dados.replace(',', '').replace("\"\"", "").replace("\"", "").replace("\]", "").replace("\[", "")
-                }
-            }
-            return dados
+        function refatoraJson(obj){
+            let b = JSON.stringify(obj)
+            b = b.replace(/-/gi,"")
+            b = JSON.parse(b)
+            return b
         }
+
 
         fetch(`https://servicodados.ibge.gov.br/api/v1/paises/${sigla}`)
             .then(res => res.json())
             .then(data => {
-                data.map(nome => {
-                    const area = areaTotal
-                    area.textContent = Object.values(nome.area["total"]).filter(n => Number(n) || n == false).join(``) + "  km²"
+                data.map(p => {
 
-
-                    const local = localizacao
-                    local.textContent = tiraVirgula(JSON.stringify(Object.values(nome.localizacao["regiao"]["nome"])))
+                    let subloc = refatoraJson(p)
+                    let a = subloc.localizacao
+                    console.log(subloc.localizacao['regiaointermediaria']['nome'])
+                    document.getElementById('area').value = p['area']['total']+" km²"
+                    document.getElementById('localizacao').value = p['localizacao']['regiao']['nome']
+                    document.getElementById('linguas').value = [p.linguas]['0']['0']['nome']
+                    document.getElementById('governo').value = p['governo']['capital']['nome']
+                    document.getElementById('sub-regiao').value = subloc.localizacao['subregiao']['nome']
+                    document.getElementById('regiao-intermediaria').value 
+                    document.getElementById('historico').value = p['historico']
                 })
             })
-
     })
-
 }
+
+
