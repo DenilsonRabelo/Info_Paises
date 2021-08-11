@@ -27,9 +27,9 @@ window.onload = function () {
         for (const i in valor) {
             sigla = valor[0] + valor[2]
         }
-        function refatoraJson(obj){
+        function refatoraJson(obj) {
             let b = JSON.stringify(obj)
-            b = b.replace(/-/gi,"")
+            b = b.replace(/-/gi, "")
             b = JSON.parse(b)
             return b
         }
@@ -41,14 +41,13 @@ window.onload = function () {
                 data.map(p => {
 
                     let subloc = refatoraJson(p)
-
-                    document.getElementById('area').value = p['area']['total']+" km²"
+                    document.getElementById('area').value = p['area']['total'] + " km²"
                     document.getElementById('localizacao').value = p['localizacao']['regiao']['nome']
                     document.getElementById('linguas').value = [p.linguas]['0']['0']['nome']
                     document.getElementById('governo').value = p['governo']['capital']['nome']
                     document.getElementById('sub-regiao').value = subloc.localizacao['subregiao']['nome']
-                    document.getElementById('regiao-intermediaria').value = subloc.localizacao.regiaointermediaria['nome']
                     document.getElementById('historico').value = p['historico']
+                    document.getElementById('unidades-monetarias').value = subloc.unidadesmonetarias['0']['id']['ISO4217ALPHA'] + ' - ' + subloc.unidadesmonetarias['0']['nome']
                 })
             })
     })
