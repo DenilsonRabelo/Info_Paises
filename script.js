@@ -1,7 +1,4 @@
 window.onload = function () {
-    var areaTotal = document.getElementById('area')
-    const localizacao = document.getElementById('localizacao')
-    const lingua = document.getElementById('linguas')
 
     const selectPaises = document.querySelector('#nome')
     let url_paises = "https://servicodados.ibge.gov.br/api/v1/paises"
@@ -44,14 +41,13 @@ window.onload = function () {
                 data.map(p => {
 
                     let subloc = refatoraJson(p)
-                    let a = subloc.localizacao
-                    console.log(subloc.localizacao['regiaointermediaria']['nome'])
+
                     document.getElementById('area').value = p['area']['total']+" km²"
                     document.getElementById('localizacao').value = p['localizacao']['regiao']['nome']
                     document.getElementById('linguas').value = [p.linguas]['0']['0']['nome']
                     document.getElementById('governo').value = p['governo']['capital']['nome']
                     document.getElementById('sub-regiao').value = subloc.localizacao['subregiao']['nome']
-                    document.getElementById('regiao-intermediaria').value 
+                    document.getElementById('regiao-intermediaria').value = subloc.localizacao.regiaointermediaria['nome']
                     document.getElementById('historico').value = p['historico']
                 })
             })
